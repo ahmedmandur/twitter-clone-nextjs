@@ -1,4 +1,4 @@
-import FollowBar from './layout/Followbar'
+import FollowBar from './layout/FollowBar'
 import Sidebar from './layout/Sidebar'
 
 interface LayoutPropos {
