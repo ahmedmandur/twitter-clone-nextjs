@@ -2,26 +2,53 @@ import useRegisterModal from '@/hooks/useRegisterModal'
 import Input from '@/components/Input'
 import { useCallback, useState } from 'react'
 import Modal from '../Modal'
+import useLoginModal from '@/hooks/useLoginModal'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
+import { signIn } from 'next-auth/react'
 
 const RegisterModal = () => {
     const registerModal = useRegisterModal()
+    const loginModal = useLoginModal()
+
     const [name, setName] = useState('')
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
 
-    const onSubmit = useCallback(() => {
+    const onToggle = useCallback(() => {
+        if (isLoading) return
+        registerModal.onClose()
+        loginModal.onOpen()
+    }, [registerModal, loginModal, isLoading])
+
+    const onSubmit = useCallback(async () => {
         try {
             setIsLoading(true)
+
+            await axios.post('/api/register', {
+                email,
+                password,
+                userName,
+                name,
+            })
+
+            toast.success('Account created successfully')
+
+            await signIn('credentials', {
+                email,
+                password,
+            })
 
             registerModal.onClose()
         } catch (error) {
             console.error(error)
+            toast.error('Something went wrong')
         } finally {
             setIsLoading(false)
         }
-    }, [registerModal])
+    }, [registerModal, email, password, userName, name])
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -61,7 +88,7 @@ const RegisterModal = () => {
             <p>
                 Already have an account?
                 <span
-                    onClick={() => {}}
+                    onClick={onToggle}
                     className="
             text-white 
             cursor-pointer 
