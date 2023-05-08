@@ -12,7 +12,7 @@ const RegisterModal = () => {
     const loginModal = useLoginModal()
 
     const [name, setName] = useState('')
-    const [userName, setUserName] = useState('')
+    const [username, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [isLoading, setIsLoading] = useState(false)
@@ -30,7 +30,7 @@ const RegisterModal = () => {
             await axios.post('/api/register', {
                 email,
                 password,
-                userName,
+                username,
                 name,
             })
 
@@ -48,7 +48,7 @@ const RegisterModal = () => {
         } finally {
             setIsLoading(false)
         }
-    }, [registerModal, email, password, userName, name])
+    }, [registerModal, email, password, username, name])
 
     const bodyContent = (
         <div className="flex flex-col gap-4">
@@ -69,7 +69,7 @@ const RegisterModal = () => {
             <Input
                 placeholder="Username"
                 onChange={(e) => setUserName(e.target.value)}
-                value={userName}
+                value={username}
                 disabled={isLoading}
             />
 
